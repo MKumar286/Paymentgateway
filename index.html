@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Growth Accelerator - Payment</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --bg: #F3F4F6;
+      --card-bg: #FFFFFF;
+      --text: #1F2937;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    p.subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #6B7280;
+      margin-bottom: 24px;
+    }
+
+    .qr-container {
+      text-align: center;
+      margin-bottom: 20px;
+      background: #F9FAFB;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px dashed #D1D5DB;
+    }
+
+    .qr-container img {
+      max-width: 200px;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+
+    button {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #DEF7EC;
+      color: #03543F;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Career Growth Accelerator</h2>
+    <p class="subtitle">Complete payment using the QR code and submit details below.</p>
+
+    <div class="qr-container">
+      <p style="margin-top:0; font-size: 12px; font-weight: 600;">Scan to Pay</p>
+      <img src="https://lh3.googleusercontent.com/d/YOUR_DRIVE_FILE_ID" alt="Payment QR Code">
+    </div>
+
+    <form id="paymentForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required placeholder="John Doe">
+      </div>
+
+      <div class="form-group">
+        <label for="rollNo">Roll Number</label>
+        <input type="text" id="rollNo" required placeholder="e.g., 21XX1A0501">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="john@example.com">
+      </div>
+
+      <div class="form-group">
+        <label for="utr">Transaction Reference / UTR Number</label>
+        <input type="text" id="utr" required placeholder="12-digit UTR/UPI Ref ID">
+      </div>
+
+      <button type="submit">Submit & Complete Registration</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // Configuration Settings
+    const SUCCESS_REDIRECT_URL = "https://your-next-link.com"; // Replace with your target redirect link
+    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"; 
+
+    // Field Entry IDs from your Google Form
+    const FIELD_NAME_ENTRY = "entry.1111111111"; // Replace with your actual entry ID
+    const FIELD_ROLL_ENTRY = "entry.2222222222"; // Replace with your actual entry ID
+    const FIELD_EMAIL_ENTRY = "entry.3333333333"; // Replace with your actual entry ID
+    const FIELD_UTR_ENTRY = "entry.4444444444"; // Replace with your actual entry ID
+
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById('fullName').value;
+      const rollNo = document.getElementById('rollNo').value;
+      const email = document.getElementById('email').value;
+      const utr = document.getElementById('utr').value;
+
+      // Construct Google Form submission URL
+      const formData = new FormData();
+      formData.append(FIELD_NAME_ENTRY, fullName);
+      formData.append(FIELD_ROLL_ENTRY, rollNo);
+      formData.append(FIELD_EMAIL_ENTRY, email);
+      formData.append(FIELD_UTR_ENTRY, utr);
+
+      // Submit data silently to Google Sheets via Google Forms
+      fetch(GOOGLE_FORM_ACTION_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      }).then(() => {
+        // Show success message
+        const msg = document.getElementById('message');
+        msg.innerText = "Payment Details Submitted Successfully! Redirecting...";
+        msg.style.display = "block";
+
+        // Redirect after 2.5 seconds
+        setTimeout(() => {
+          window.location.href = SUCCESS_REDIRECT_URL;
+        }, 2500);
+      }).catch(err => {
+        alert("Submission failed. Please check your internet connection.");
+      });
+    });
+  </script>
+</body>
+</html>
