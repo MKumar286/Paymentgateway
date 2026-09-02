@@ -10,6 +10,8 @@
     input, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
     button { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; }
     .pay-btn { background: #16a34a; margin-top: 15px; text-decoration: none; display: block; text-align: center; color: white; padding: 12px; border-radius: 6px; font-weight: bold;}
+    .qr-container { text-align: center; margin-top: 15px; }
+    .qr-container img { width: 200px; height: 200px; margin-top: 10px; border: 1px solid #ddd; padding: 5px; border-radius: 8px; }
     .hidden { display: none; }
   </style>
 </head>
@@ -30,25 +32,49 @@
   </form>
 
   <div id="paymentSection" class="hidden">
-    <p>Tap below to pay via GPay/PhonePe/Paytm. <strong>Do not edit the payment note</strong> so we can auto-verify your Roll Number.</p>
-    <a id="upiLink" href="#" class="pay-btn">Pay via UPI App</a>
+    <!-- Desktop QR Code View -->
+    <div class="qr-container">
+      <p style="margin: 0; font-weight: bold;">Scan to Pay via GPay / PhonePe / Paytm:</p>
+      <img id="qrImage" src="" alt="UPI QR Code">
+    </div>
+
+    <!-- Mobile Direct Button View -->
+    <p style="font-size: 13px; color: #555; text-align: center; margin-top: 15px;">
+      Or tap below if you are on a Mobile Phone:
+    </p>
+    <a id="upiLink" href="#" class="pay-btn">Open UPI App</a>
+    
+    <p style="font-size: 12px; color: #d97706; text-align: center; margin-top: 10px;">
+      <strong>Important:</strong> Do not change the payment description/note in your app so we can verify your Roll Number!
+    </p>
   </div>
 </div>
 
 <script>
-  const UPI_ID = "yourupiid@okaxis"; // REPLACE WITH YOUR UPI ID
+  // 1. REPLACE THIS WITH YOUR REAL UPI ID (e.g. 9876543210@paytm or name@okaxis)
+  const UPI_ID = "yourupiid@okaxis"; 
   const AMOUNT = "400.00";
 
   document.getElementById('studentForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const roll = document.getElementById('roll').value;
-    const name = document.getElementById('name').value;
+    const roll = document.getElementById('roll').value.trim();
+    const name = document.getElementById('name').value.trim();
 
-    // Construct precise UPI URL pre-filling amount and Roll Number in note (tn)
+    // Create custom reference note
     const note = encodeURIComponent(`CGA-${roll}`);
-    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent("Career Accelerator")}&am=${AMOUNT}&cu=INR&tn=${note}`;
+    const payeeName = encodeURIComponent("Career Accelerator");
 
+    // Standard UPI Intent Link
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${payeeName}&am=${AMOUNT}&cu=INR&tn=${note}`;
+
+    // Update the button link for Mobile users
     document.getElementById('upiLink').setAttribute('href', upiUrl);
+
+    // Generate dynamic QR Code for Desktop users using quickchart.io API
+    const qrApiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200`;
+    document.getElementById('qrImage').setAttribute('src', qrApiUrl);
+
+    // Show payment elements
     document.getElementById('paymentSection').classList.remove('hidden');
     document.getElementById('studentForm').classList.add('hidden');
   });
