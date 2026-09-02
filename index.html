@@ -5,78 +5,227 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Career Growth Accelerator - Payment</title>
   <style>
-    body { font-family: sans-serif; background: #f4f4f9; padding: 20px; display: flex; justify-content: center; }
-    .card { background: white; padding: 25px; border-radius: 10px; width: 100%; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    input, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-    button { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; }
-    .pay-btn { background: #16a34a; margin-top: 15px; text-decoration: none; display: block; text-align: center; color: white; padding: 12px; border-radius: 6px; font-weight: bold;}
-    .qr-container { text-align: center; margin-top: 15px; }
-    .qr-container img { width: 200px; height: 200px; margin-top: 10px; border: 1px solid #ddd; padding: 5px; border-radius: 8px; }
-    .hidden { display: none; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --bg: #f4f4f9;
+      --card: #ffffff;
+      --text: #1f2937;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 28px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .price-tag {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #4b5563;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    button, .pay-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: block;
+      text-decoration: none;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .pay-btn {
+      background-color: var(--success);
+      color: white;
+      margin-top: 15px;
+    }
+
+    .qr-container {
+      text-align: center;
+      margin-top: 15px;
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px dashed #d1d5db;
+    }
+
+    .qr-container img {
+      width: 200px;
+      height: 200px;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+
+    .alert-box {
+      font-size: 12px;
+      color: #b45309;
+      background-color: #fef3c7;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 15px;
+      line-height: 1.4;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
 <div class="card">
   <h2>Career Growth Accelerator</h2>
-  <p>Fee: <strong>₹400</strong></p>
+  <div class="price-tag">Registration Fee: <strong>₹400</strong></div>
 
+  <!-- Student Details Form -->
   <form id="studentForm">
-    <label>Full Name</label>
-    <input type="text" id="name" required placeholder="John Doe">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required placeholder="Enter your full name">
+    </div>
     
-    <label>Roll Number</label>
-    <input type="text" id="roll" required placeholder="e.g. 21001A0501">
+    <div class="form-group">
+      <label for="roll">Roll Number</label>
+      <input type="text" id="roll" required placeholder="e.g., 21001A0501">
+    </div>
 
     <button type="submit">Proceed to Pay ₹400</button>
   </form>
 
+  <!-- Payment Display Section -->
   <div id="paymentSection" class="hidden">
-    <!-- Desktop QR Code View -->
+    <!-- QR Code for Desktop Users -->
     <div class="qr-container">
-      <p style="margin: 0; font-weight: bold;">Scan to Pay via GPay / PhonePe / Paytm:</p>
+      <p style="margin: 0; font-weight: bold; font-size: 14px;">Scan with GPay / PhonePe / Paytm:</p>
       <img id="qrImage" src="" alt="UPI QR Code">
     </div>
 
-    <!-- Mobile Direct Button View -->
-    <p style="font-size: 13px; color: #555; text-align: center; margin-top: 15px;">
-      Or tap below if you are on a Mobile Phone:
+    <!-- Direct Deep-Link Button for Mobile Users -->
+    <p style="font-size: 13px; color: #6b7280; text-align: center; margin-top: 15px; margin-bottom: 5px;">
+      Or tap below to open your payment app:
     </p>
     <a id="upiLink" href="#" class="pay-btn">Open UPI App</a>
     
-    <p style="font-size: 12px; color: #d97706; text-align: center; margin-top: 10px;">
-      <strong>Important:</strong> Do not change the payment description/note in your app so we can verify your Roll Number!
-    </p>
+    <div class="alert-box">
+      <strong>⚠️ Important:</strong> Do NOT edit the payment remark/description in your UPI app so we can verify your Roll Number!
+    </div>
   </div>
 </div>
 
 <script>
-  // 1. REPLACE THIS WITH YOUR REAL UPI ID (e.g. 9876543210@paytm or name@okaxis)
-  const UPI_ID = "yourupiid@okaxis"; 
+  // ==========================================
+  // CONFIGURATION: REPLACE WITH YOUR UPI ID
+  // ==========================================
+  const UPI_ID = "yourupiid@okaxis"; // e.g., 9876543210@paytm, name@okicici
   const AMOUNT = "400.00";
+  const PAYEE_NAME = "Career Accelerator";
 
+  function generateUpiUrl(rollNumber) {
+    const note = encodeURIComponent(`CGA-${rollNumber}`);
+    const name = encodeURIComponent(PAYEE_NAME);
+    return `upi://pay?pa=${UPI_ID}&pn=${name}&am=${AMOUNT}&cu=INR&tn=${note}`;
+  }
+
+  // Handle Form Submission
   document.getElementById('studentForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const roll = document.getElementById('roll').value.trim();
-    const name = document.getElementById('name').value.trim();
 
-    // Create custom reference note
-    const note = encodeURIComponent(`CGA-${roll}`);
-    const payeeName = encodeURIComponent("Career Accelerator");
+    if (!roll) {
+      alert("Please enter a valid Roll Number.");
+      return;
+    }
 
-    // Standard UPI Intent Link
-    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${payeeName}&am=${AMOUNT}&cu=INR&tn=${note}`;
+    const upiUrl = generateUpiUrl(roll);
 
-    // Update the button link for Mobile users
-    document.getElementById('upiLink').setAttribute('href', upiUrl);
-
-    // Generate dynamic QR Code for Desktop users using quickchart.io API
+    // 1. Generate dynamic QR Code for desktop browsers
     const qrApiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200`;
     document.getElementById('qrImage').setAttribute('src', qrApiUrl);
 
-    // Show payment elements
+    // 2. Set link for mobile button
+    document.getElementById('upiLink').setAttribute('href', upiUrl);
+
+    // 3. Show payment interface
     document.getElementById('paymentSection').classList.remove('hidden');
     document.getElementById('studentForm').classList.add('hidden');
+
+    // 4. Force direct redirection on mobile
+    window.location.href = upiUrl;
+  });
+
+  // Direct Button Click Handler (Fallback for Mobile Browsers)
+  document.getElementById('upiLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    const roll = document.getElementById('roll').value.trim();
+    const upiUrl = generateUpiUrl(roll);
+    
+    // Force open UPI app
+    window.location.href = upiUrl;
   });
 </script>
 
