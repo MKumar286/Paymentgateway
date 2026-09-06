@@ -3,353 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CareerGrasp Payment Gateway</title>
+  <title>CareerGraspp - Checkout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
-      --brand-primary: #6366f1;
-      --brand-hover: #4f46e5;
-      --brand-secondary: #0ea5e9;
-      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
-      --bg-dark: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --input-bg: #1e293b;
-      --input-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-bright: #38bdf8;
-      --success: #10b981;
+      --primary-blue: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --bg-light: #f8fafc;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-green: #10b981;
+      --accent-orange: #d97706;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #f1f5f9;
+      color: var(--text-dark);
       min-height: 100vh;
-      padding: 24px 16px;
     }
 
-    .wrapper {
-      width: 100%;
-      max-width: 460px;
+    /* Top Navbar */
+    .navbar {
+      background: #ffffff;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    .brand-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .brand-header .badge {
-      display: inline-flex;
+    .brand-logo {
+      background: #090d16;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      border-radius: 20px;
+    }
+
+    .brand-logo span {
+      color: #3b82f6;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-courses {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .btn-login {
+      background: #f1f5f9;
+      color: var(--text-dark);
+    }
+
+    .btn-register {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      color: white;
+    }
+
+    /* Main Checkout Container */
+    .checkout-container {
+      max-width: 1100px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      padding: 0 20px;
+    }
+
+    /* Left Section - Payment Methods */
+    .payment-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid var(--border-color);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .shield-icon {
+      color: var(--accent-green);
+      font-size: 22px;
+    }
+
+    /* Method Option Cards */
+    .method-card {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .method-card.active {
+      border: 2px solid var(--primary-blue);
+      background: #fafafa;
+    }
+
+    .method-header {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .method-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .method-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #1e293b;
+    }
+
+    .badges-container {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+    }
+
+    .badge.gpay { color: #2563eb; }
+    .badge.phonepe { color: #7c3aed; }
+    .badge.paytm { background: #002e6e; color: #ffffff; border: none; }
+    .badge.bhim { color: #16a34a; }
+    .badge.visa { color: #1d4ed8; font-style: italic; }
+    .badge.mc { color: #dc2626; }
+    .badge.rupay { color: #ea580c; }
+
+    .method-content {
+      padding: 0 20px 20px 20px;
+    }
+
+    .input-box {
+      margin-top: 10px;
+    }
+
+    .input-box label {
+      display: block;
       font-size: 13px;
       font-weight: 600;
-      color: var(--text-bright);
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: #ffffff;
+    }
+
+    .input-box input:focus {
+      border-color: var(--primary-blue);
+    }
+
+    /* Right Section - Order Summary */
+    .summary-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid var(--border-color);
+      height: fit-content;
+    }
+
+    .summary-section h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e293b;
+    }
+
+    .course-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--text-muted);
       margin-bottom: 12px;
     }
 
-    .brand-header h1 {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
+    .summary-row.discount {
+      color: var(--accent-green);
+      font-weight: 500;
     }
 
-    .brand-header p {
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 400;
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 16px 0;
     }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 32px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-    }
-
-    .summary-box {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--input-border);
-      border-radius: 12px;
-      padding: 16px 20px;
+    .total-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
     }
 
-    .summary-box .title {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-weight: 500;
+    .total-label {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
     }
 
-    .summary-box .program {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-top: 2px;
+    .total-amount {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e3a8a;
     }
 
-    .summary-box .amount {
-      font-size: 22px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      background-color: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text-main);
-      transition: all 0.2s ease;
-    }
-
-    input::placeholder {
-      color: #64748b;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--brand-primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-      background-color: #0f172a;
-    }
-
-    .btn-submit {
+    .btn-pay {
       width: 100%;
       padding: 14px;
-      background: var(--accent-gradient);
-      color: #ffffff;
+      background: var(--accent-green);
+      color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       font-size: 16px;
       font-weight: 700;
-      font-family: inherit;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-      margin-top: 10px;
-      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-    }
-
-    .btn-submit:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 12px 24px -5px rgba(99, 102, 241, 0.5);
-    }
-
-    .btn-submit:active {
-      transform: translateY(0);
-    }
-
-    .status-card {
-      text-align: center;
-      padding: 10px 0;
-    }
-
-    .status-icon {
-      width: 56px;
-      height: 56px;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--success);
-      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      margin: 0 auto 16px auto;
+      gap: 8px;
+      transition: background 0.2s ease;
     }
 
-    .status-card h3 {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 8px;
+    .btn-pay:hover {
+      background: #059669;
     }
 
-    .status-card p {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .footer-security {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 20px;
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-
-    .hidden {
-      display: none;
+    /* Responsive */
+    @media (max-width: 850px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+      .navbar {
+        padding: 16px 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="wrapper">
-  <div class="brand-header">
-    <div class="badge">Official Checkout</div>
-    <h1>Careergrasp Payment Gateway</h1>
-    <p>Complete your registration for Career Growth Accelerator</p>
-  </div>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="brand-logo">
+      CAREER <span>GRASPP</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn-nav btn-courses">🎓 Courses</button>
+      <button class="btn-nav btn-login">🚪 Login</button>
+      <button class="btn-nav btn-register">👤+ New Registration</button>
+    </div>
+  </header>
 
-  <div class="card">
-    <div id="paymentView">
-      <div class="summary-box">
-        <div>
-          <div class="title">Selected Program</div>
-          <div class="program">Career Accelerator</div>
-        </div>
-        <div class="amount">₹400</div>
+  <!-- Checkout View -->
+  <main class="checkout-container">
+    
+    <!-- Left: Payment Method Selection -->
+    <section class="payment-section">
+      <div class="section-header">
+        <span class="shield-icon">🛡️</span>
+        <h2>Select Payment Method</h2>
       </div>
 
-      <form id="studentForm">
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" required placeholder="John Doe">
+      <!-- UPI Option -->
+      <div class="method-card active" id="card-upi">
+        <div class="method-header" onclick="selectMethod('upi')">
+          <div class="method-left">
+            <input type="radio" id="upi" name="payment_method" checked>
+            <label for="upi" class="method-title">UPI Instant Checkout</label>
+          </div>
+          <div class="badges-container">
+            <span class="badge gpay">GPay</span>
+            <span class="badge phonepe">PhonePe</span>
+            <span class="badge paytm">Paytm</span>
+            <span class="badge bhim">BHIM</span>
+          </div>
         </div>
-
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" required placeholder="john@example.com">
+        <div class="method-content" id="content-upi">
+          <div class="input-box">
+            <label for="vpa">Enter Virtual Payment Address (VPA / UPI ID)</label>
+            <input type="text" id="vpa" placeholder="username@okhdfcbank / mobile@ybl">
+          </div>
         </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" required placeholder="9876543210">
-        </div>
-        
-        <div class="form-group">
-          <label for="roll">Roll Number</label>
-          <input type="text" id="roll" required placeholder="21001A0501">
-        </div>
-
-        <button type="button" id="payBtn" class="btn-submit">Proceed to Pay ₹400</button>
-      </form>
-
-      <div class="footer-security">
-        🔒 Encrypted & Secure 256-Bit Razorpay Checkout
       </div>
-    </div>
 
-    <div id="successMessage" class="status-card hidden">
-      <div class="status-icon">✓</div>
-      <h3>Registration Confirmed!</h3>
-      <p>Thank you for enrolling. Your payment was processed successfully and your student profile has been recorded.</p>
-    </div>
-  </div>
-</div>
+      <!-- Card Option -->
+      <div class="method-card" id="card-card">
+        <div class="method-header" onclick="selectMethod('card')">
+          <div class="method-left">
+            <input type="radio" id="card" name="payment_method">
+            <label for="card" class="method-title">Credit / Debit Cards</label>
+          </div>
+          <div class="badges-container">
+            <span class="badge visa">VISA</span>
+            <span class="badge mc">MC</span>
+            <span class="badge rupay">RuPay</span>
+          </div>
+        </div>
+      </div>
 
-<script>
-  // CONFIGURATION
-  const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Replace with your Razorpay Key ID
-  const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Replace with your Web App URL
+      <!-- Net Banking Option -->
+      <div class="method-card" id="card-netbanking">
+        <div class="method-header" onclick="selectMethod('netbanking')">
+          <div class="method-left">
+            <input type="radio" id="netbanking" name="payment_method">
+            <label for="netbanking" class="method-title">Net Banking</label>
+          </div>
+          <div class="badges-container">
+            <span style="font-size: 18px;">🏛️</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  document.getElementById('payBtn').addEventListener('click', function(e) {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const roll = document.getElementById('roll').value.trim();
+    <!-- Right: Order Summary -->
+    <section class="summary-section">
+      <h3>Order Summary</h3>
+      <div class="course-title">
+        English Communication & Public Speaking Mastery
+      </div>
 
-    if (!name || !email || !phone || !roll) {
-      alert("Please complete all input fields.");
-      return;
+      <div class="summary-row">
+        <span>Course Price</span>
+        <span>₹3499</span>
+      </div>
+      <div class="summary-row">
+        <span>GST / Taxes (18%)</span>
+        <span>₹630</span>
+      </div>
+      <div class="summary-row discount">
+        <span>Platform Discount</span>
+        <span>- ₹0</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="total-row">
+        <span class="total-label">Total Amount</span>
+        <span class="total-amount">₹4129</span>
+      </div>
+
+      <button class="btn-pay" id="payBtn">
+        🔒 Complete Payment
+      </button>
+    </section>
+
+  </main>
+
+  <script>
+    // Configuration Variables
+    const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Insert your key here
+    const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Optional sheet endpoint
+
+    // Toggle Payment Options UI
+    function selectMethod(methodType) {
+      document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
+      document.querySelectorAll('input[name="payment_method"]').forEach(radio => radio.checked = false);
+
+      if (methodType === 'upi') {
+        document.getElementById('card-upi').classList.add('active');
+        document.getElementById('upi').checked = true;
+      } else if (methodType === 'card') {
+        document.getElementById('card-card').classList.add('active');
+        document.getElementById('card').checked = true;
+      } else if (methodType === 'netbanking') {
+        document.getElementById('card-netbanking').classList.add('active');
+        document.getElementById('netbanking').checked = true;
+      }
     }
 
-    const options = {
-      "key": RAZORPAY_KEY_ID,
-      "amount": 40000, // 40000 paise = ₹400
-      "currency": "INR",
-      "name": "Careergrasp",
-      "description": "Career Growth Accelerator Registration",
-      "handler": function (response) {
-        saveToGoogleSheet({
-          name: name,
-          email: email,
-          phone: phone,
-          roll: roll,
-          payment_id: response.razorpay_payment_id
-        });
-      },
-      "prefill": {
-        "name": name,
-        "email": email,
-        "contact": phone
-      },
-      "theme": {
-        "color": "#6366f1"
-      }
-    };
+    // Trigger Razorpay Checkout
+    document.getElementById('payBtn').addEventListener('click', function () {
+      const options = {
+        "key": RAZORPAY_KEY_ID,
+        "amount": 412900, // Amount in paise (₹4129)
+        "currency": "INR",
+        "name": "CAREER GRASPP",
+        "description": "English Communication & Public Speaking Mastery",
+        "handler": function (response) {
+          alert('Payment Successful! Transaction ID: ' + response.razorpay_payment_id);
+          saveOrderDetails(response.razorpay_payment_id);
+        },
+        "theme": {
+          "color": "#1e3a8a"
+        }
+      };
 
-    const rzp1 = new Razorpay(options);
-    rzp1.open();
-  });
-
-  function saveToGoogleSheet(data) {
-    fetch(GOOGLE_SHEET_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    }).then(() => {
-      document.getElementById('paymentView').classList.add('hidden');
-      document.getElementById('successMessage').classList.remove('hidden');
-    }).catch(error => {
-      console.error('Error saving data:', error);
-      alert('Payment received, but recording details failed. Please contact support.');
+      const rzp = new Razorpay(options);
+      rzp.open();
     });
-  }
-</script>
 
+    function saveOrderDetails(paymentId) {
+      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL") return;
+
+      fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          course: "English Communication & Public Speaking Mastery",
+          amount: "4129",
+          payment_id: paymentId,
+          timestamp: new Date().toISOString()
+        })
+      });
+    }
+  </script>
 </body>
 </html>
