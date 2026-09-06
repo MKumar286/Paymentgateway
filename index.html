@@ -18,6 +18,7 @@
       --border-color: #e2e8f0;
       --accent-green: #10b981;
       --accent-orange: #d97706;
+      --razorpay-blue: #02042b;
     }
 
     * {
@@ -103,7 +104,7 @@
       padding: 0 20px;
     }
 
-    /* Left Section - Payment Methods */
+    /* Left Section - Razorpay Gateway Details */
     .payment-section {
       background: #ffffff;
       border-radius: 12px;
@@ -131,91 +132,54 @@
       font-size: 22px;
     }
 
-    /* Method Option Cards */
-    .method-card {
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      margin-bottom: 16px;
-      background: #ffffff;
-      overflow: hidden;
-      transition: border-color 0.2s ease;
-    }
-
-    .method-card.active {
+    /* Single Razorpay Box */
+    .razorpay-card {
       border: 2px solid var(--primary-blue);
-      background: #fafafa;
+      border-radius: 12px;
+      padding: 24px;
+      background: #f8fafc;
+      text-align: center;
     }
 
-    .method-header {
-      padding: 18px 20px;
-      display: flex;
+    .razorpay-badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-
-    .method-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .method-title {
-      font-weight: 700;
-      font-size: 16px;
-      color: #1e293b;
-    }
-
-    .badges-container {
-      display: flex;
       gap: 8px;
+      background: #0c2340;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .razorpay-badge span {
+      color: #3b82f6;
+    }
+
+    .razorpay-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .supported-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .badge {
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 8px;
+      padding: 5px 10px;
       border-radius: 4px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
-    }
-
-    .badge.gpay { color: #2563eb; }
-    .badge.phonepe { color: #7c3aed; }
-    .badge.paytm { background: #002e6e; color: #ffffff; border: none; }
-    .badge.bhim { color: #16a34a; }
-    .badge.visa { color: #1d4ed8; font-style: italic; }
-    .badge.mc { color: #dc2626; }
-    .badge.rupay { color: #ea580c; }
-
-    .method-content {
-      padding: 0 20px 20px 20px;
-    }
-
-    .input-box {
-      margin-top: 10px;
-    }
-
-    .input-box label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
       color: #334155;
-      margin-bottom: 8px;
-    }
-
-    .input-box input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-      background: #ffffff;
-    }
-
-    .input-box input:focus {
-      border-color: var(--primary-blue);
     }
 
     /* Right Section - Order Summary */
@@ -329,60 +293,26 @@
   <!-- Checkout View -->
   <main class="checkout-container">
     
-    <!-- Left: Payment Method Selection -->
+    <!-- Left: Dedicated Razorpay Section -->
     <section class="payment-section">
       <div class="section-header">
         <span class="shield-icon">🛡️</span>
-        <h2>Select Payment Method</h2>
+        <h2>Payment Gateway</h2>
       </div>
 
-      <!-- UPI Option -->
-      <div class="method-card active" id="card-upi">
-        <div class="method-header" onclick="selectMethod('upi')">
-          <div class="method-left">
-            <input type="radio" id="upi" name="payment_method" checked>
-            <label for="upi" class="method-title">UPI Instant Checkout</label>
-          </div>
-          <div class="badges-container">
-            <span class="badge gpay">GPay</span>
-            <span class="badge phonepe">PhonePe</span>
-            <span class="badge paytm">Paytm</span>
-            <span class="badge bhim">BHIM</span>
-          </div>
+      <div class="razorpay-card">
+        <div class="razorpay-badge">
+          <span>⚡</span> Secured by Razorpay
         </div>
-        <div class="method-content" id="content-upi">
-          <div class="input-box">
-            <label for="vpa">Enter Virtual Payment Address (VPA / UPI ID)</label>
-            <input type="text" id="vpa" placeholder="username@okhdfcbank / mobile@ybl">
-          </div>
-        </div>
-      </div>
-
-      <!-- Card Option -->
-      <div class="method-card" id="card-card">
-        <div class="method-header" onclick="selectMethod('card')">
-          <div class="method-left">
-            <input type="radio" id="card" name="payment_method">
-            <label for="card" class="method-title">Credit / Debit Cards</label>
-          </div>
-          <div class="badges-container">
-            <span class="badge visa">VISA</span>
-            <span class="badge mc">MC</span>
-            <span class="badge rupay">RuPay</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Net Banking Option -->
-      <div class="method-card" id="card-netbanking">
-        <div class="method-header" onclick="selectMethod('netbanking')">
-          <div class="method-left">
-            <input type="radio" id="netbanking" name="payment_method">
-            <label for="netbanking" class="method-title">Net Banking</label>
-          </div>
-          <div class="badges-container">
-            <span style="font-size: 18px;">🏛️</span>
-          </div>
+        <p class="razorpay-desc">
+          Click below to initiate your transaction safely. Razorpay supports all major payment modes including UPI, Credit/Debit Cards, Net Banking, and Mobile Wallets.
+        </p>
+        <div class="supported-options">
+          <span class="badge">GPay</span>
+          <span class="badge">PhonePe</span>
+          <span class="badge">Paytm</span>
+          <span class="badge">Cards</span>
+          <span class="badge">NetBanking</span>
         </div>
       </div>
     </section>
@@ -415,7 +345,7 @@
       </div>
 
       <button class="btn-pay" id="payBtn">
-        🔒 Complete Payment
+        🔒 Pay via Razorpay (₹4129)
       </button>
     </section>
 
@@ -426,24 +356,7 @@
     const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Insert your key here
     const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Optional sheet endpoint
 
-    // Toggle Payment Options UI
-    function selectMethod(methodType) {
-      document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
-      document.querySelectorAll('input[name="payment_method"]').forEach(radio => radio.checked = false);
-
-      if (methodType === 'upi') {
-        document.getElementById('card-upi').classList.add('active');
-        document.getElementById('upi').checked = true;
-      } else if (methodType === 'card') {
-        document.getElementById('card-card').classList.add('active');
-        document.getElementById('card').checked = true;
-      } else if (methodType === 'netbanking') {
-        document.getElementById('card-netbanking').classList.add('active');
-        document.getElementById('netbanking').checked = true;
-      }
-    }
-
-    // Trigger Razorpay Checkout
+    // Trigger Razorpay Checkout directly
     document.getElementById('payBtn').addEventListener('click', function () {
       const options = {
         "key": RAZORPAY_KEY_ID,
