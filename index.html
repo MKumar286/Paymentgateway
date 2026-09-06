@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
       --primary-blue: #1e3a8a;
@@ -17,7 +16,6 @@
       --text-muted: #64748b;
       --border-color: #e2e8f0;
       --accent-green: #10b981;
-      --accent-orange: #d97706;
     }
 
     * {
@@ -38,7 +36,7 @@
       background: #ffffff;
       padding: 16px 40px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center; /* Centered brand header without extra buttons */
       align-items: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -46,10 +44,10 @@
     .brand-logo {
       background: #090d16;
       color: #ffffff;
-      padding: 10px 18px;
+      padding: 10px 24px;
       border-radius: 8px;
       font-weight: 800;
-      font-size: 18px;
+      font-size: 20px;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
@@ -58,39 +56,6 @@
 
     .brand-logo span {
       color: #3b82f6;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-nav {
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-courses {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .btn-login {
-      background: #f1f5f9;
-      color: var(--text-dark);
-    }
-
-    .btn-register {
-      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-      color: white;
     }
 
     /* Main Checkout Container */
@@ -121,7 +86,7 @@
       width: 100%;
       border-radius: 10px;
       overflow: hidden;
-      background: #090d16; /* Dark background to blend seamlessly with the image */
+      background: #090d16;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -129,7 +94,6 @@
       box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
     }
 
-    /* Image Shrinking and Responsive Fit */
     .logo-container img {
       width: 100%;
       max-width: 100%;
@@ -226,6 +190,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-decoration: none;
       transition: background 0.2s ease;
     }
 
@@ -251,17 +216,12 @@
     <div class="brand-logo">
       CAREER <span>GRASPP</span>
     </div>
-    <div class="nav-buttons">
-      <button class="btn-nav btn-courses">🎓 Courses</button>
-      <button class="btn-nav btn-login">🚪 Login</button>
-      <button class="btn-nav btn-register">👤+ New Registration</button>
-    </div>
   </header>
 
   <!-- Checkout View -->
   <main class="checkout-container">
     
-    <!-- Left: Embedded and Auto-Scaled Company Logo -->
+    <!-- Left: Embedded Company Logo -->
     <section class="logo-section">
       <div class="logo-container">
         <img src="C.jpg" alt="Career Graspp Logo - Learn | Lead | Level Up">
@@ -271,7 +231,7 @@
       </div>
     </section>
 
-    <!-- Right: Order Summary & Razorpay Trigger -->
+    <!-- Right: Order Summary & Link Trigger -->
     <section class="summary-section">
       <h3>Order Summary</h3>
       <div class="course-title">
@@ -280,11 +240,11 @@
 
       <div class="summary-row">
         <span>Course Price</span>
-        <span>₹3499</span>
+        <span>₹50</span>
       </div>
       <div class="summary-row">
-        <span>GST / Taxes (18%)</span>
-        <span>₹630</span>
+        <span>GST / Taxes</span>
+        <span>₹0</span>
       </div>
       <div class="summary-row discount">
         <span>Platform Discount</span>
@@ -295,57 +255,16 @@
 
       <div class="total-row">
         <span class="total-label">Total Amount</span>
-        <span class="total-amount">₹4129</span>
+        <span class="total-amount">₹50</span>
       </div>
 
-      <button class="btn-pay" id="payBtn">
-        🔒 Pay via Razorpay (₹4129)
-      </button>
+      <!-- Direct Link to Razorpay Payment Page -->
+      <a href="https://rzp.io/rzp/QDIoCEm" target="_blank" class="btn-pay">
+        🔒 Complete Payment (₹50)
+      </a>
     </section>
 
   </main>
 
-  <script>
-    // Configuration Variables
-    const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Replace with your Razorpay Key ID
-    const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Optional Google Sheet endpoint
-
-    // Trigger Razorpay Checkout directly
-    document.getElementById('payBtn').addEventListener('click', function () {
-      const options = {
-        "key": RAZORPAY_KEY_ID,
-        "amount": 412900, // Amount in paise (₹4129)
-        "currency": "INR",
-        "name": "CAREER GRASPP",
-        "description": "English Communication & Public Speaking Mastery",
-        "handler": function (response) {
-          alert('Payment Successful! Transaction ID: ' + response.razorpay_payment_id);
-          saveOrderDetails(response.razorpay_payment_id);
-        },
-        "theme": {
-          "color": "#1e3a8a"
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
-    });
-
-    function saveOrderDetails(paymentId) {
-      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL") return;
-
-      fetch(GOOGLE_SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          course: "English Communication & Public Speaking Mastery",
-          amount: "4129",
-          payment_id: paymentId,
-          timestamp: new Date().toISOString()
-        })
-      });
-    }
-  </script>
 </body>
 </html>
