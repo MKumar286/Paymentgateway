@@ -3,125 +3,228 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career Growth Accelerator - Payment</title>
+  <title>CareerGrasp Payment Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
-      --primary: #4f46e5;      /* Indigo */
-      --primary-hover: #4338ca;
-      --success: #059669;        /* Emerald Green */
-      --bg-slate: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
+      --brand-primary: #6366f1;
+      --brand-hover: #4f46e5;
+      --brand-secondary: #0ea5e9;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-bright: #38bdf8;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-slate);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%);
       color: var(--text-main);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
+      padding: 24px 16px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+    }
+
+    .brand-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .brand-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 400;
     }
 
     .card {
       background: var(--card-bg);
-      padding: 32px;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-      border: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
     }
 
-    .card-header {
-      text-align: center;
+    .summary-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 24px;
     }
 
-    h2 {
-      margin: 0 0 8px 0;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-main);
+    .summary-box .title {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
-    .price-badge {
-      display: inline-block;
-      background-color: #e0e7ff;
-      color: var(--primary);
+    .summary-box .program {
+      font-size: 15px;
       font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 14px;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+
+    .summary-box .amount {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
       font-size: 13px;
+      font-weight: 600;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
 
     input {
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-sizing: border-box;
+      padding: 12px 16px;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
       font-size: 15px;
-      background-color: #f1f5f9;
+      font-family: inherit;
+      color: var(--text-main);
       transition: all 0.2s ease;
+    }
+
+    input::placeholder {
+      color: #64748b;
     }
 
     input:focus {
       outline: none;
-      background-color: #ffffff;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+      background-color: #0f172a;
     }
 
-    button {
+    .btn-submit {
       width: 100%;
       padding: 14px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
+      background: var(--accent-gradient);
+      color: #ffffff;
       border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
       cursor: pointer;
-      background-color: var(--primary);
-      color: white;
-      transition: background-color 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
       margin-top: 10px;
+      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
     }
 
-    button:hover {
-      background-color: var(--primary-hover);
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px -5px rgba(99, 102, 241, 0.5);
     }
 
-    .status-message {
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .status-card {
       text-align: center;
-      padding: 20px;
-      border-radius: 8px;
+      padding: 10px 0;
     }
 
-    .status-message.success {
-      background-color: #d1fae5;
+    .status-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(16, 185, 129, 0.15);
       color: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px auto;
+    }
+
+    .status-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .status-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .footer-security {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 20px;
+      color: var(--text-muted);
+      font-size: 12px;
     }
 
     .hidden {
@@ -131,46 +234,64 @@
 </head>
 <body>
 
-<div class="card">
-  <div class="card-header">
-    <h2>Career Growth Accelerator</h2>
-    <div class="price-badge">Registration Fee: ₹400</div>
+<div class="wrapper">
+  <div class="brand-header">
+    <div class="badge">Official Checkout</div>
+    <h1>Careergrasp Payment Gateway</h1>
+    <p>Complete your registration for Career Growth Accelerator</p>
   </div>
 
-  <form id="studentForm">
-    <div class="form-group">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" required placeholder="Enter your full name">
+  <div class="card">
+    <div id="paymentView">
+      <div class="summary-box">
+        <div>
+          <div class="title">Selected Program</div>
+          <div class="program">Career Accelerator</div>
+        </div>
+        <div class="amount">₹400</div>
+      </div>
+
+      <form id="studentForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="john@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required placeholder="9876543210">
+        </div>
+        
+        <div class="form-group">
+          <label for="roll">Roll Number</label>
+          <input type="text" id="roll" required placeholder="21001A0501">
+        </div>
+
+        <button type="button" id="payBtn" class="btn-submit">Proceed to Pay ₹400</button>
+      </form>
+
+      <div class="footer-security">
+        🔒 Encrypted & Secure 256-Bit Razorpay Checkout
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="email">Email Address</label>
-      <input type="email" id="email" required placeholder="student@example.com">
+    <div id="successMessage" class="status-card hidden">
+      <div class="status-icon">✓</div>
+      <h3>Registration Confirmed!</h3>
+      <p>Thank you for enrolling. Your payment was processed successfully and your student profile has been recorded.</p>
     </div>
-
-    <div class="form-group">
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" required placeholder="9876543210">
-    </div>
-    
-    <div class="form-group">
-      <label for="roll">Roll Number</label>
-      <input type="text" id="roll" required placeholder="e.g., 21001A0501">
-    </div>
-
-    <button type="button" id="payBtn">Pay ₹400 via Razorpay</button>
-  </form>
-
-  <div id="successMessage" class="status-message success hidden">
-    <h3>Payment Successful!</h3>
-    <p>Your registration details have been saved successfully.</p>
   </div>
 </div>
 
 <script>
   // CONFIGURATION
   const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Replace with your Razorpay Key ID
-  const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Replace with Web App URL
+  const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Replace with your Web App URL
 
   document.getElementById('payBtn').addEventListener('click', function(e) {
     const name = document.getElementById('name').value.trim();
@@ -179,18 +300,17 @@
     const roll = document.getElementById('roll').value.trim();
 
     if (!name || !email || !phone || !roll) {
-      alert("Please fill in all details before proceeding.");
+      alert("Please complete all input fields.");
       return;
     }
 
     const options = {
       "key": RAZORPAY_KEY_ID,
-      "amount": 40000, // Amount in paise (40000 paise = ₹400)
+      "amount": 40000, // 40000 paise = ₹400
       "currency": "INR",
-      "name": "Career Growth Accelerator",
-      "description": "Registration Fee",
+      "name": "Careergrasp",
+      "description": "Career Growth Accelerator Registration",
       "handler": function (response) {
-        // Payment successful callback
         saveToGoogleSheet({
           name: name,
           email: email,
@@ -205,7 +325,7 @@
         "contact": phone
       },
       "theme": {
-        "color": "#4f46e5"
+        "color": "#6366f1"
       }
     };
 
@@ -222,11 +342,11 @@
       },
       body: JSON.stringify(data)
     }).then(() => {
-      document.getElementById('studentForm').classList.add('hidden');
+      document.getElementById('paymentView').classList.add('hidden');
       document.getElementById('successMessage').classList.remove('hidden');
     }).catch(error => {
       console.error('Error saving data:', error);
-      alert('Payment successful, but failed to log registration data. Please contact support.');
+      alert('Payment received, but recording details failed. Please contact support.');
     });
   }
 </script>
