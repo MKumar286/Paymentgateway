@@ -18,7 +18,6 @@
       --border-color: #e2e8f0;
       --accent-green: #10b981;
       --accent-orange: #d97706;
-      --razorpay-blue: #02042b;
     }
 
     * {
@@ -102,84 +101,53 @@
       grid-template-columns: 1.6fr 1fr;
       gap: 24px;
       padding: 0 20px;
+      align-items: start;
     }
 
-    /* Left Section - Razorpay Gateway Details */
-    .payment-section {
+    /* Left Section - Company Logo Showcase */
+    .logo-section {
       background: #ffffff;
       border-radius: 12px;
-      padding: 28px;
-      border: 1px solid var(--border-color);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .section-header h2 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .shield-icon {
-      color: var(--accent-green);
-      font-size: 22px;
-    }
-
-    /* Single Razorpay Box */
-    .razorpay-card {
-      border: 2px solid var(--primary-blue);
-      border-radius: 12px;
       padding: 24px;
-      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
 
-    .razorpay-badge {
+    .logo-container {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #090d16; /* Dark background to blend seamlessly with the image */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Image Shrinking and Responsive Fit */
+    .logo-container img {
+      width: 100%;
+      max-width: 100%;
+      max-height: 380px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .trust-badge {
+      margin-top: 16px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #0c2340;
-      color: #ffffff;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 15px;
-      margin-bottom: 16px;
-    }
-
-    .razorpay-badge span {
-      color: #3b82f6;
-    }
-
-    .razorpay-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .supported-options {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      color: #334155;
+      font-weight: 600;
     }
 
     /* Right Section - Order Summary */
@@ -265,7 +233,7 @@
       background: #059669;
     }
 
-    /* Responsive */
+    /* Responsive adjustments */
     @media (max-width: 850px) {
       .checkout-container {
         grid-template-columns: 1fr;
@@ -293,31 +261,17 @@
   <!-- Checkout View -->
   <main class="checkout-container">
     
-    <!-- Left: Dedicated Razorpay Section -->
-    <section class="payment-section">
-      <div class="section-header">
-        <span class="shield-icon">🛡️</span>
-        <h2>Payment Gateway</h2>
+    <!-- Left: Embedded and Auto-Scaled Company Logo -->
+    <section class="logo-section">
+      <div class="logo-container">
+        <img src="C.jpg" alt="Career Graspp Logo - Learn | Lead | Level Up">
       </div>
-
-      <div class="razorpay-card">
-        <div class="razorpay-badge">
-          <span>⚡</span> Secured by Razorpay
-        </div>
-        <p class="razorpay-desc">
-          Click below to initiate your transaction safely. Razorpay supports all major payment modes including UPI, Credit/Debit Cards, Net Banking, and Mobile Wallets.
-        </p>
-        <div class="supported-options">
-          <span class="badge">GPay</span>
-          <span class="badge">PhonePe</span>
-          <span class="badge">Paytm</span>
-          <span class="badge">Cards</span>
-          <span class="badge">NetBanking</span>
-        </div>
+      <div class="trust-badge">
+        🔒 Official CareerGraspp Payment Portal
       </div>
     </section>
 
-    <!-- Right: Order Summary -->
+    <!-- Right: Order Summary & Razorpay Trigger -->
     <section class="summary-section">
       <h3>Order Summary</h3>
       <div class="course-title">
@@ -353,8 +307,8 @@
 
   <script>
     // Configuration Variables
-    const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Insert your key here
-    const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Optional sheet endpoint
+    const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Replace with your Razorpay Key ID
+    const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Optional Google Sheet endpoint
 
     // Trigger Razorpay Checkout directly
     document.getElementById('payBtn').addEventListener('click', function () {
