@@ -4,20 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Career Growth Accelerator - Payment</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --success: #16a34a;
-      --bg: #f4f4f9;
-      --card: #ffffff;
-      --text: #1f2937;
+      --primary: #4f46e5;      /* Indigo */
+      --primary-hover: #4338ca;
+      --success: #059669;        /* Emerald Green */
+      --bg-slate: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-slate);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,107 +31,97 @@
     }
 
     .card {
-      background: var(--card);
-      padding: 28px;
-      border-radius: 12px;
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      max-width: 440px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid var(--border-color);
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 24px;
     }
 
     h2 {
-      margin-top: 0;
-      text-align: center;
-      color: var(--text);
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
-    .price-tag {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #4b5563;
+    .price-badge {
+      display: inline-block;
+      background-color: #e0e7ff;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
     }
 
     label {
       display: block;
       font-weight: 600;
       margin-bottom: 6px;
-      font-size: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
       box-sizing: border-box;
       font-size: 15px;
+      background-color: #f1f5f9;
+      transition: all 0.2s ease;
     }
 
     input:focus {
       outline: none;
+      background-color: #ffffff;
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-    }
-
-    button, .pay-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      border: none;
-      cursor: pointer;
-      box-sizing: border-box;
-      display: block;
-      text-decoration: none;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      border: none;
+      cursor: pointer;
       background-color: var(--primary);
       color: white;
+      transition: background-color 0.2s ease;
+      margin-top: 10px;
     }
 
     button:hover {
       background-color: var(--primary-hover);
     }
 
-    .pay-btn {
-      background-color: var(--success);
-      color: white;
-      margin-top: 15px;
-    }
-
-    .qr-container {
+    .status-message {
       text-align: center;
-      margin-top: 15px;
-      background: #f9fafb;
-      padding: 15px;
+      padding: 20px;
       border-radius: 8px;
-      border: 1px dashed #d1d5db;
     }
 
-    .qr-container img {
-      width: 200px;
-      height: 200px;
-      margin-top: 10px;
-      border-radius: 6px;
-    }
-
-    .alert-box {
-      font-size: 12px;
-      color: #b45309;
-      background-color: #fef3c7;
-      padding: 10px;
-      border-radius: 6px;
-      text-align: center;
-      margin-top: 15px;
-      line-height: 1.4;
+    .status-message.success {
+      background-color: #d1fae5;
+      color: var(--success);
     }
 
     .hidden {
@@ -139,14 +132,25 @@
 <body>
 
 <div class="card">
-  <h2>Career Growth Accelerator</h2>
-  <div class="price-tag">Registration Fee: <strong>₹400</strong></div>
+  <div class="card-header">
+    <h2>Career Growth Accelerator</h2>
+    <div class="price-badge">Registration Fee: ₹400</div>
+  </div>
 
-  <!-- Student Details Form -->
   <form id="studentForm">
     <div class="form-group">
       <label for="name">Full Name</label>
       <input type="text" id="name" required placeholder="Enter your full name">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" required placeholder="student@example.com">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required placeholder="9876543210">
     </div>
     
     <div class="form-group">
@@ -154,79 +158,77 @@
       <input type="text" id="roll" required placeholder="e.g., 21001A0501">
     </div>
 
-    <button type="submit">Proceed to Pay ₹400</button>
+    <button type="button" id="payBtn">Pay ₹400 via Razorpay</button>
   </form>
 
-  <!-- Payment Display Section -->
-  <div id="paymentSection" class="hidden">
-    <!-- QR Code for Desktop Users -->
-    <div class="qr-container">
-      <p style="margin: 0; font-weight: bold; font-size: 14px;">Scan with GPay / PhonePe / Paytm:</p>
-      <img id="qrImage" src="" alt="UPI QR Code">
-    </div>
-
-    <!-- Direct Deep-Link Button for Mobile Users -->
-    <p style="font-size: 13px; color: #6b7280; text-align: center; margin-top: 15px; margin-bottom: 5px;">
-      Or tap below to open your payment app:
-    </p>
-    <a id="upiLink" href="#" class="pay-btn">Open UPI App</a>
-    
-    <div class="alert-box">
-      <strong>⚠️ Important:</strong> Do NOT edit the payment remark/description in your UPI app so we can verify your Roll Number!
-    </div>
+  <div id="successMessage" class="status-message success hidden">
+    <h3>Payment Successful!</h3>
+    <p>Your registration details have been saved successfully.</p>
   </div>
 </div>
 
 <script>
-  // ==========================================
-  // CONFIGURATION: REPLACE WITH YOUR UPI ID
-  // ==========================================
-  const UPI_ID = "yourupiid@okaxis"; // e.g., 9876543210@paytm, name@okicici
-  const AMOUNT = "400.00";
-  const PAYEE_NAME = "Career Accelerator";
+  // CONFIGURATION
+  const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Replace with your Razorpay Key ID
+  const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Replace with Web App URL
 
-  function generateUpiUrl(rollNumber) {
-    const note = encodeURIComponent(`CGA-${rollNumber}`);
-    const name = encodeURIComponent(PAYEE_NAME);
-    return `upi://pay?pa=${UPI_ID}&pn=${name}&am=${AMOUNT}&cu=INR&tn=${note}`;
-  }
-
-  // Handle Form Submission
-  document.getElementById('studentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+  document.getElementById('payBtn').addEventListener('click', function(e) {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const roll = document.getElementById('roll').value.trim();
 
-    if (!roll) {
-      alert("Please enter a valid Roll Number.");
+    if (!name || !email || !phone || !roll) {
+      alert("Please fill in all details before proceeding.");
       return;
     }
 
-    const upiUrl = generateUpiUrl(roll);
+    const options = {
+      "key": RAZORPAY_KEY_ID,
+      "amount": 40000, // Amount in paise (40000 paise = ₹400)
+      "currency": "INR",
+      "name": "Career Growth Accelerator",
+      "description": "Registration Fee",
+      "handler": function (response) {
+        // Payment successful callback
+        saveToGoogleSheet({
+          name: name,
+          email: email,
+          phone: phone,
+          roll: roll,
+          payment_id: response.razorpay_payment_id
+        });
+      },
+      "prefill": {
+        "name": name,
+        "email": email,
+        "contact": phone
+      },
+      "theme": {
+        "color": "#4f46e5"
+      }
+    };
 
-    // 1. Generate dynamic QR Code for desktop browsers
-    const qrApiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200`;
-    document.getElementById('qrImage').setAttribute('src', qrApiUrl);
-
-    // 2. Set link for mobile button
-    document.getElementById('upiLink').setAttribute('href', upiUrl);
-
-    // 3. Show payment interface
-    document.getElementById('paymentSection').classList.remove('hidden');
-    document.getElementById('studentForm').classList.add('hidden');
-
-    // 4. Force direct redirection on mobile
-    window.location.href = upiUrl;
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
   });
 
-  // Direct Button Click Handler (Fallback for Mobile Browsers)
-  document.getElementById('upiLink').addEventListener('click', function(e) {
-    e.preventDefault();
-    const roll = document.getElementById('roll').value.trim();
-    const upiUrl = generateUpiUrl(roll);
-    
-    // Force open UPI app
-    window.location.href = upiUrl;
-  });
+  function saveToGoogleSheet(data) {
+    fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }).then(() => {
+      document.getElementById('studentForm').classList.add('hidden');
+      document.getElementById('successMessage').classList.remove('hidden');
+    }).catch(error => {
+      console.error('Error saving data:', error);
+      alert('Payment successful, but failed to log registration data. Please contact support.');
+    });
+  }
 </script>
 
 </body>
